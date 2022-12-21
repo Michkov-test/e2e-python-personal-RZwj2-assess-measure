@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/created-by: application-service
+    app.kubernetes.io/instance: component-python-private
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: component-python-private
+    app.kubernetes.io/part-of: e2e-python-personal
+  name: component-python-private
+  namespace: e2e-demo-xilw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: component-python-private
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: component-python-private
+    spec:
+      containers:
+      - image: quay.io/mkovarik/test-images:e008333510074a4c91dec065a5ab46fa
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        name: container-image
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: 8081
+        resources: {}
+      imagePullSecrets:
+      - name: gmriigkmsc
+status: {}
